@@ -10,15 +10,16 @@ import { sendFriendInvitation } from '../../store/slices/friends/friendsSlice'
 const AddFriendDialog = ({
   isDialogOpen,
   closeDialogHandler,
-  sendFriendInvitation = ()=>{}
+  // sendFriendInvitation = ()=>{}
 })=>{
 
   const dispatch = useDispatch();
   const [email,setEmail] = useState('');
   const [isFormValid, setIsFormValid] = useState('');
 
-  const handleSendInvitation = ()=>{
+  const handleSendInvitation = () => {
     /**send friend request logic */
+    dispatch(sendFriendInvitation({ targetEmailAddress : email }))
   }
 
   const handleCloseDialog = ()=>{

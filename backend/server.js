@@ -8,6 +8,7 @@ const socketServer = require('./socketServer');
 
 /**Routes */
 const authRoutes = require('./routes/authRoutes');
+const friendInvitationRoutes = require('./routes/friendInvitationRoutes');
 
 const PORT = process.env.PORT || process.env.API_PORT;
 
@@ -17,6 +18,7 @@ app.use(cors());
 
 /** auth routes*/
 app.use('/api/auth',authRoutes);
+app.use('/api/friend-invitation',friendInvitationRoutes);
 
 
 const server = http.createServer(app);

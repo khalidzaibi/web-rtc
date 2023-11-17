@@ -1,8 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-
-import { login,register } from '../../../api';
-import { openAlertMessage } from '../alertNotification/alertSlice'
-import store from '../../../store';
+import  apiClient  from '../../../api'
 
 export const initialState = {
 	loading: false,
@@ -11,23 +8,29 @@ export const initialState = {
 }
 
 export const userLogin = createAsyncThunk('userLogin', async (data) => {
-	const response = await login(data);
-	if(response.error) {
-		store.dispatch(openAlertMessage(response?.err?.response?.data))
-	}else{
+	try{
+		const response = await apiClient.post('/auth/login',data);
 		localStorage.setItem('userData',JSON.stringify(response?.user));	
-	}
 		return response;
+	} catch(err){
+		return err
+	}
 });
 
-export const userRegister = createAsyncThunk('userRegister', async (data) => {
-	const response = await register(data);
-	if(response?.error) {
-		store.dispatch(openAlertMessage(response?.err?.response?.data))
-	}else{
-		localStorage.setItem('userData',JSON.stringify(response?.user));	
+export const userRegister = createAsyncThunk('userRegister', async (data) => {	
+	try{
+		const response = await apiClient.post('/auth/register',data);
+		localStorage.setItem('userData',JSON.stringify(response?.user));
+		return response;
+	} catch(err){		
+		return err
 	}
-	return response;
+	// if(response?.error) {
+	// 	store.dispatch(openAlertMessage(response?.err?.response?.data))
+	// }else{
+	// 	localStorage.setItem('userData',JSON.stringify(response?.user));	
+	// }
+	// return response;
 })
 
 export const userSlice = createSlice({
@@ -40,17 +43,13 @@ export const userSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder
-			.addCase(userLogin.fulfilled, (state, action) => {
-				if(!action.payload?.error){
+			.addCase(userLogin.fulfilled, (state, action) => {				
 					state.success = true;
-					state.user = action.payload?.user;
-				}
+					state.user = action.payload?.user;				
 			})
-			.addCase(userRegister.fulfilled, (state, action) => {
-				if(!action.payload?.error){
+			.addCase(userRegister.fulfilled, (state, action) => {				
 					state.success = true;
-					state.user = action.payload?.user;
-				}
+					state.user = action.payload?.user;				
 			})
 	},
 })

@@ -9,7 +9,7 @@ export const initialState = {
 
 export const sendFriendInvitation = createAsyncThunk('sendFriendInvitation',async(data) =>{
 	try{
-		return await apiClient.post('/friend-invitation/invite')
+		return  await apiClient.post('/friend-invitation/invite',data)
   } catch(err){
    	return err;
   }
